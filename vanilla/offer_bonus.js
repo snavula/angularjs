@@ -21,9 +21,9 @@
 
 
 var cnBonus = (function(_self, window, document, $) {
-  
+
   // ----------  Data  ---------- //
-  
+
   // stores all the data needed for redeeming a bonus
   var data = {
     is_logged_in   : null, // boolean (req) - if the user is logged in
@@ -38,14 +38,14 @@ var cnBonus = (function(_self, window, document, $) {
     youtube_id     : null, // string  (opt) - YouTube ID for the video
     video_id       : null, // string  (opt) - Snapp ID for the video
     video_eligible : null, // boolean (opt) - if the video is eligible for redemption
-    
+
     quiz_id       : null, // string  (opt) - Snapp ID for the quiz
     answer_id      : null, // string  (opt) - answer ID from the quiz
   }
   var init = function (_data) {
     var _external_keys = Object.keys(_data);
     var _internal_keys = Object.keys(data);
-    
+
     // iterate through the data that's being passed to the init function
     // and map it to the corresponding key in the internal data
     for (var i = 0; i < _external_keys.length; i++) {
@@ -58,16 +58,16 @@ var cnBonus = (function(_self, window, document, $) {
           // remove it from the _internal keys array (slight optimization)
           //_internal_keys.splice(_internal_keys[k], 1);
         }
-      } 
+      }
     }
-    
+
     // If the page has a video bonus, now is a good time to load YouTube's API
     if (data.youtube_id !== null) loadYouTubeAPI();
   }
-  
-  
+
+
   // ----------  YouTube API  ---------- //
-  
+
   // Load the youtube API
   var loadYouTubeAPI = function (_data) {
     var tag = document.createElement('script');
@@ -75,7 +75,7 @@ var cnBonus = (function(_self, window, document, $) {
     var firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
-  
+
   // When the youtube API is ready, assign click handlers
   window.onYouTubePlayerAPIReady = function () {
     document.getElementById('bonus_video_play').addEventListener('click', function(e) {
@@ -84,21 +84,21 @@ var cnBonus = (function(_self, window, document, $) {
       $('#quiz_notifier').addClass('noDisplay');
       if(data.is_logged_in) {
         if(!data.is_fave) {
-           window.notifier.display('error', '店舗を選択されておりません。<a href="/retailers/select">よく使う店舗の追加はこちら</a>');
+           window.notifier.display('error', 'hello hello <a href="/retailers/select">NEW NAME</a>');
          }
         else if(!data.has_fsc && !data.is_pex) {
-          window.notifier.display('error', 'ポイントカード追加されておりません。<a href="/account/mycard">ポイントカードの登録はこちら。</a>');
+          window.notifier.display('error', 'hello hello<a href="/account/mycard">LINK NAME</a>');
          }
         else  {
         calibratePlayer();
         document.getElementById('bonus_section_video_player_stage').style.display = 'block';
-       } 
+       }
       } else {
         window.location = '/account/login';
       }
     });
   }
-  
+
   // Set player configuration.
   var calibratePlayer = function() {
     var _window_width = window.innerWidth < 600 ? window.innerWidth : 600;
@@ -110,7 +110,7 @@ var cnBonus = (function(_self, window, document, $) {
         autoplay: '1', // if the playback should start automatically
         color: 'white', // color scheme
         hl: 'jp', // language
-        fs: 0, // 
+        fs: 0, //
         modestbranding: '1', // remove the standard YouTube logo
         controls: 0, // remove playback controls (so the user can't skip to the end)
         disablekb: 0, // disable keyboard controls
@@ -137,12 +137,12 @@ var cnBonus = (function(_self, window, document, $) {
       requestRedemption(_data);
     }
   }
-  
-  
-  
-  
+
+
+
+
   // ----------  Quiz Handling  ---------- //
-  
+
   var clipQuiz = function (_answer) {
     if(data.is_logged_in) {
       var _data = {
@@ -151,16 +151,16 @@ var cnBonus = (function(_self, window, document, $) {
         store_id    : data.store_id,
         quiz_id    : _answer.quiz_id,
         answer_id   : _answer.answer_id
-      }  
+      }
       requestRedemptionQuiz(_data);
     } else {
       window.location = '/account/login';
     }
   }
-  
-  
-  
-  
+
+
+
+
   // ----------  Redemption Call  ---------- //
 
   // Makes the actual ajax request
@@ -174,7 +174,7 @@ var cnBonus = (function(_self, window, document, $) {
        if (resp.success) {
          window.location.hash = "#video";
          location.reload(true);
-         window.notifier.store('success', "ご視聴ありがとうございます。 "+data.video_points+" P 追加されました！");
+         window.notifier.store('success', "HELLO "+data.video_points+" P HEY");
         } else {
          //window.notifier.display('error', String(resp.message.error));
         }
@@ -184,23 +184,23 @@ var cnBonus = (function(_self, window, document, $) {
       }
     }, 'JSON');
   }
-  
-  
+
+
   // Makes the actual ajax request for quiz
   var requestRedemptionQuiz = function (_data) {
-  
+
       window.notifier.clear();
       $('#video_notifier').addClass('noDisplay');
       $('#quiz_notifier').removeClass('noDisplay');
      if(data.is_logged_in) {
         if(!data.is_fave) {
-           window.notifier.display('error', '店舗を選択されておりません。<a href="/retailers/select">よく使う店舗の追加はこちら</a>');
+           window.notifier.display('error', 'TEXT <a href="/retailers/select">Some Text</a>');
          }
         else if(!data.has_fsc && !data.is_pex) {
-          window.notifier.display('error', 'ポイントカード追加されておりません。<a href="/account/mycard">ポイントカードの登録はこちら。</a>');
+          window.notifier.display('error', 'Message <a href="/account/mycard">Some Text</a>');
          }
         else  {
-       
+
        $.post('/ajax/clip-bonus-quiz', _data, function (resp) {
       if(resp) {
        if (resp.success) {
@@ -214,16 +214,16 @@ var cnBonus = (function(_self, window, document, $) {
         window.notifier.display('error', "Technical Error");
        }
      }, 'JSON');
-    } 
+    }
    } else {
         window.location = '/account/login';
     }
   }
-    
+
   // -----  Public Methods  ----- //
   return {
     init: init,
     redeemQuiz : clipQuiz
   }
-  
+
 })(cnBonus || {}, window, document, jQuery);

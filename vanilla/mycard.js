@@ -8,7 +8,7 @@ var mycard = (function(self, window, $){
     function init() {
         //Delete link
         $(".delete-fsc").on("click", function () {
-            if (confirm('あなたはカードを削除してもよろしいですか？')) {
+            if (confirm('ABCDEFGHIJKL')) {
                 var fsc_id      = (0 === $("#fsc_id").length      ? "" : $("#fsc_id").val());
                 var retailer_id = (0 === $("#retailer_id").length ? "" : $("#retailer_id").val());
                 $.post('/ajax/remove-fsc-card', {"holder_id": fsc_id, "retailer_id": retailer_id},
@@ -22,7 +22,7 @@ var mycard = (function(self, window, $){
                                     window.notifier.store('error', response.message.error);
                                 }
                             }
-                            alert('カード番号を削除しました');
+                            alert('HELLO ');
                             window.location.href = '/account/mycard/'+retailer_id;
                         }
                         else {

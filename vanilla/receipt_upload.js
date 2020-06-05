@@ -2,7 +2,7 @@
 //
 //  Handles front-end logic for the receipt upload feature.
 //
-//  TODO:  
+//  TODO:
 //      *   Make this configurable and decouple it from the DOM
 //      *   This code is a mix of two versions, unused methods
 //          should be removed.  (At the time of this writing,
@@ -21,12 +21,12 @@ var receipt_upload = (function(self, window, $){
 
 
     // ----------  Variables  ---------- //
-    
+
     var files_store = []; // collection of hashmaps representing each file
     //  Example:    files_store = [
     //                  {
     //                      raw: (string) 'base64 encoded string of an image file',
-    //                      size: (num) size of the file in bytes 
+    //                      size: (num) size of the file in bytes
     //                  }
     //              ]
     var total_file_size = 0; // total file size (bytes) of all images to be uploaded
@@ -36,7 +36,7 @@ var receipt_upload = (function(self, window, $){
 
 
     // ----------  Utils  ---------- //
-    
+
     // Helper function that displays errors and scrolls to
     // the notifier box
     function displayError(message) {
@@ -84,7 +84,7 @@ var receipt_upload = (function(self, window, $){
     function hasValidExtension ( _str ) {
         var _valid_extensions = new RegExp(/(jpg|jpeg|png|gif)/i);
         if ( _valid_extensions.test(_str) ) return true;
-        displayError('ファイル形式が異なるため、投稿いただいたレシート画像を受け付けることができません。投稿を受け付ける事ができるファイル形式はこの4つです (\"jpeg\", \"jpg\", \"png\", \"gif\")');
+        displayError('Some message (\"jpeg\", \"jpg\", \"png\", \"gif\")');
         return false;
     }
 
@@ -98,21 +98,21 @@ var receipt_upload = (function(self, window, $){
         //     return true; // if _total_file_size is less than (approx) 10MB
         // }
         if (calcTotalFileSize() < 10000000) return true;
-        displayError('投稿いただくレシート画像の合計ファイル容量が10MBを超えないようご注意ください');
+        displayError('Some message');
         return false
     }
 
     // Returns true if the number of files selected by the user is 4 or less.
     function withinFileCountLimit ( _files ) {
         if (_files.length + files_store.length <= 4) return true;
-        displayError('一度に4つのレシート画像を投稿することができます');
+        displayError('Some error message');
         return false;
     }
 
     // Returns true if offers selected by the user at-least one
     function isOfferSelected() {
         if ($(".offer_tile_receiptMode_checkbox:checkbox:checked").length > 0) return true;
-        displayError('クーポンを選択してください');
+        displayError('Some error message');
         return false;
     }
 
@@ -129,21 +129,21 @@ var receipt_upload = (function(self, window, $){
         // // Make sure we're not trying to upload too many files
         // // (including files we may have added prior to this validation)
         // if ( !withinFileCountLimit( _files ) ) return false; // Checks the number of files vs the max allowable
-        
+
         // Check the extension of each file and ensure it
         // doesn't put us over the payload limit when we submit the form
         for (var i = 0; i < _files.length; i++) {
             var _file = _files[i];
             // Validate file extension and make sure we're still within the payload limit
             if ( !hasValidExtension( _file.type.split('/').pop() ) || !withinPayloadLimit(_file.size) ) {
-                $(_input).val('');   
+                $(_input).val('');
                 return false;
             }
         }
 
         // If all of the files passed validation, we can add them to the DOM
         // and parse them into the application.
-        
+
         // commented out for new version
         // for (var n = 0; n < _files.length; n++) {
         //     parseFile(_files[n]);
@@ -227,7 +227,7 @@ var receipt_upload = (function(self, window, $){
                     '   <label for="basketPage_receiptForm_preview_checkbox_' + _count + '" ' +
                     '          class="basketPage_receiptForm_preview" ' +
                     '          style="background-image: url(' + _string + ');" ' +
-                    '          data-receipt-num="' + _count + '">' + 
+                    '          data-receipt-num="' + _count + '">' +
                     '       <div class="basketPage_receiptForm_preview_close">' +
                     '           <svg viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg">' +
                     '               <circle cx="25" cy="25" r="25" class="basketPage_receiptForm_preview_close_circle" />' +
@@ -317,14 +317,14 @@ var receipt_upload = (function(self, window, $){
         }
         process_step = _step_num; // update the global step num
     }
-    
+
     // Calibrate the UI so that the receipt upload feature
     // acts as a standalone feature, and not integrated into
     // the basket page.
     function is_standalone () {
         $('#basketPage_receiptForm_back').hide();
         standalone = true;
-        
+
     }
 
     // Updates the remaining memory display
@@ -352,7 +352,7 @@ var receipt_upload = (function(self, window, $){
         // using a vanilla selector becuase the ajax post needs the
         // the vanilla DOM node in order to send files correctly
         var _form = document.getElementById('basketPage_receiptForm');
-        
+
         $.ajax({
             url: $(_form).attr('action'),   // Url to which the request is send
             type: 'POST',                   // Type of request to be send, called as method

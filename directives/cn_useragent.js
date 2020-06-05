@@ -10,10 +10,10 @@ angular.module('cnUseragent', []).directive('cnUseragent', ['$rootScope', functi
   return {
     restrict: 'E',
     controller: ['$scope', '$rootScope', function($scope, $rootScope) {
-      
+
       // make sure this directive is instantiated only once
       if (document.getElementsByTagName('cn-useragent').length > 1) throw 'ERROR: More than one <cn-useragent> tag exists on the page.';
-      
+
       var ua = navigator.userAgent;
 
       // Matches user agent against a platorm (iOS, Android, or Desktop)
@@ -25,7 +25,7 @@ angular.module('cnUseragent', []).directive('cnUseragent', ['$rootScope', functi
         }
         return 'Desktop';
       }
-      
+
       // Publish the platform to $rootScope
       $rootScope.userAgent = $scope.checkUA();
       $scope.userAgent == 'Desktop' ? $scope.isDesktop = true : $scope.isDesktop = false;
